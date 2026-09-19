@@ -3,6 +3,7 @@
 <div align="center">
 
 [![NextStep Hacks 2026](https://img.shields.io/badge/NextStep_Hacks_2026-Earth_Forward_Track-10B981?style=for-the-badge)](https://nextstep2026.devpost.com/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-terrapulse--gamma.vercel.app-0071E3?style=for-the-badge&logo=vercel&logoColor=white)](https://terrapulse-gamma.vercel.app)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![OpenCV](https://img.shields.io/badge/OpenCV-5.0_Vision-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org)

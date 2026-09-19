@@ -77,6 +77,10 @@ TerraPulse enables anyone—farmers, investors, or land appraisers—to drop a G
 ### Built With (Devpost Tags)
 `python`, `fastapi`, `opencv`, `numpy`, `anthropic-claude`, `leaflet-js`, `open-meteo`, `isric-soilgrids`, `javascript`, `html5`, `css3`, `docker`
 
+### Links for Devpost Form
+* **GitHub Repository:** `https://github.com/DarkCrossDungen/never.give.up`
+* **Live Website URL:** `https://terrapulse-gamma.vercel.app`
+
 ---
 
 ## 🎬 3-Minute Video Demo Script (Click-by-Click Guide)
