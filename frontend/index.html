@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TerraPulse — Autonomous Farmland Diligence & Cultivation Intelligence</title>
+
+  <!-- Fonts: Inter & SF Pro System Font fallback -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- Apple-Grade Light Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app-container">
+    <!-- Apple Frosted Glass Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <a href="#" class="brand-badge" onclick="app.switchView('studio'); return false;">
+          <span class="brand-logo-mark">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </span>
+          <span class="brand-title">TerraPulse</span>
+          <span class="brand-divider">/</span>
+          <span class="brand-sub">Earth Forward</span>
+        </a>
+
+        <!-- Top Navigation Segmented Switcher -->
+        <nav class="nav-switcher">
+          <button class="nav-tab active" data-view="studio" onclick="app.switchView('studio')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            <span>Diligence Studio</span>
+          </button>
+          <button class="nav-tab" data-view="farmer-impact" onclick="app.switchView('farmer-impact')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>Farmer Crisis & Solutions</span>
+          </button>
+          <button class="nav-tab" data-view="how-it-works" onclick="app.switchView('how-it-works')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>How It Works & Science</span>
+          </button>
+          <button class="nav-tab" data-view="benchmarks" onclick="app.switchView('benchmarks')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            <span>Benchmark Registry</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="header-right">
+        <div class="telemetry-badge">
+          <span class="telemetry-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <span>Open-Meteo & SoilGrids Synced</span>
+        </div>
+        <button class="btn btn-outline btn-sm" id="btn-print-report" onclick="window.print()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Export Dossier (PDF)
+        </button>
+      </div>
+    </header>
+
+    <!-- VIEW 1: DILIGENCE STUDIO -->
+    <main class="main-grid view-container" id="view-studio">
+      <!-- Left Configuration Panel -->
+      <aside class="panel config-panel">
+        <div class="panel-header">
+          <span class="panel-title">Field Configuration</span>
+          <span class="panel-tag">Parameters</span>
+        </div>
+
+        <div class="panel-body">
+          <!-- Benchmark Scenarios Selector -->
+          <div class="form-group">
+            <label class="form-label">Preset Benchmark Scenarios</label>
+            <select id="scenario-selector" class="form-control">
+              <option value="">-- Select a Verified Agricultural Benchmark --</option>
+              <option value="midwest_corn_nitrogen_deficit">US Corn Belt (Iowa) — Nitrogen Leaching & Patchy Chlorosis</option>
+              <option value="punjab_semi_arid_saline">Indo-Gangetic Plain (Punjab) — Salinity & Rootzone Stress</option>
+              <option value="california_almond_drought">Central Valley (California) — Groundwater Deficit</option>
+            </select>
+          </div>
+
+          <div class="divider-text"><span>Or Configure Custom Farmland Parcel</span></div>
+
+          <!-- Interactive GPS Map Picker -->
+          <div class="form-group">
+            <div class="label-row">
+              <label class="form-label">Geographic Coordinates (Drop Pin)</label>
+              <span class="coordinate-display font-mono" id="coord-display">30.9010° N, 75.8573° E</span>
+            </div>
+            <div id="leaflet-map" class="map-container"></div>
+            <div class="lat-lon-inputs">
+              <input type="number" id="input-lat" step="0.0001" value="30.9010" class="form-control font-mono" placeholder="Latitude">
+              <input type="number" id="input-lon" step="0.0001" value="75.8573" class="form-control font-mono" placeholder="Longitude">
+            </div>
+          </div>
+
+          <!-- Parcel Parameters -->
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Target Crop</label>
+              <input type="text" id="input-crop" value="Corn / Maize" class="form-control" placeholder="e.g. Soybeans, Wheat">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Area (Hectares)</label>
+              <input type="number" id="input-area" value="15.0" step="0.5" class="form-control font-mono">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Audit Objective</label>
+            <select id="input-intent" class="form-control">
+              <option value="Pre-Purchase Farmland Acquisition Audit">Pre-Purchase Farmland Acquisition Audit</option>
+              <option value="Pre-Cultivation Land Viability Assessment">Pre-Cultivation Land Viability Assessment</option>
+              <option value="Post-Harvest Soil Health & Stunted Crop Recovery">Post-Harvest Soil Health & Stunted Crop Recovery</option>
+            </select>
+          </div>
+
+          <!-- Field Image Upload -->
+          <div class="form-group">
+            <label class="form-label">Field Drone / Satellite Imagery</label>
+            <div class="drop-zone" id="drop-zone">
+              <input type="file" id="file-input" accept="image/*" class="file-input-hidden">
+              <div class="drop-zone-prompt" id="drop-zone-prompt">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-apple-green-dark); margin-bottom:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span class="drop-zone-text">Click or drag field orthomosaic / drone photo</span>
+                <span class="drop-zone-hint">Supports standard RGB: PNG, JPG, GeoTIFF</span>
+              </div>
+              <div class="drop-zone-preview hidden" id="drop-zone-preview">
+                <img id="preview-img" src="" alt="Field Preview">
+                <span class="preview-filename font-mono" id="preview-filename">image.png</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Trigger Button -->
+          <button class="btn btn-primary btn-block btn-lg" id="btn-run-analysis">
+            Run Agronomic Due Diligence
+          </button>
+        </div>
+      </aside>
+
+      <!-- Right Analytics & Diligence Results Panel -->
+      <section class="panel results-panel">
+        <div class="panel-header">
+          <span class="panel-title">Farmland Diligence Dossier</span>
+          <span class="panel-tag font-mono" id="dossier-timestamp">Ready for Analysis</span>
+        </div>
+
+        <!-- Initial Placeholder State -->
+        <div id="state-empty" class="empty-state">
+          <div class="empty-content">
+            <div class="empty-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            </div>
+            <h3>Autonomous Land Diligence Ready</h3>
+            <p>Select an agricultural benchmark scenario from the left panel or upload custom drone imagery to compute visible-spectrum VARI indices, extract crop dead zones, and query live soil telemetry.</p>
+            <div class="empty-quickstart">
+              <button class="btn btn-secondary btn-sm" onclick="app.loadScenario('midwest_corn_nitrogen_deficit')">Load Midwest Corn Anomaly</button>
+              <button class="btn btn-secondary btn-sm" onclick="app.loadScenario('punjab_semi_arid_saline')">Load Punjab Salinity Audit</button>
+              <button class="btn btn-secondary btn-sm" onclick="app.loadScenario('california_almond_drought')">Load California Drought</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="state-loading" class="loading-state hidden">
+          <div class="spinner"></div>
+          <span class="loading-step" id="loading-step-text">Processing spectral VARI decomposition...</span>
+          <span class="loading-sub">Querying Open-Meteo multi-depth soil moisture & Claude 3.5 Sonnet...</span>
+        </div>
+
+        <!-- Populated Results Content -->
+        <div id="state-results" class="results-content hidden">
+          <!-- Top Executive Metrics Strip -->
+          <div class="kpi-grid">
+            <div class="kpi-card kpi-primary">
+              <span class="kpi-label">Land Viability Score</span>
+              <div class="kpi-score-row">
+                <span class="kpi-number" id="val-viability-score">--</span>
+                <span class="kpi-grade" id="val-viability-grade">--</span>
+              </div>
+              <span class="kpi-sub" id="val-verdict">--</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">Canopy Coverage</span>
+              <span class="kpi-value text-emerald" id="val-canopy-pct">--%</span>
+              <span class="kpi-sub">Vegetated biomass fraction</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">Stunted Anomaly Zones</span>
+              <span class="kpi-value text-amber" id="val-anomalies-count">--</span>
+              <span class="kpi-sub">Chlorotic / barren clusters</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">Topsoil Moisture (0-7cm)</span>
+              <span class="kpi-value text-cyan" id="val-soil-moisture">-- m³/m³</span>
+              <span class="kpi-sub" id="val-moisture-status">Live Agromet Sync</span>
+            </div>
+
+            <div class="kpi-card">
+              <span class="kpi-label">Drought Vulnerability</span>
+              <span class="kpi-value text-amber" id="val-drought-index">--/100</span>
+              <span class="kpi-sub" id="val-drought-cat">Telemetry Metric</span>
+            </div>
+          </div>
+
+          <!-- Dual-Spectrum Vision Viewer -->
+          <div class="card visualizer-card">
+            <div class="card-header">
+              <span class="card-title">Spectral Computer Vision Inspector (OpenCV 5.0)</span>
+              <div class="spectrum-tabs">
+                <button class="tab-btn active" data-tab="annotated">Anomaly Contours</button>
+                <button class="tab-btn" data-tab="heatmap">VARI Stress Heatmap</button>
+                <button class="tab-btn" data-tab="mask">Canopy Mask</button>
+              </div>
+            </div>
+            <div class="visualizer-body">
+              <div class="image-viewport">
+                <img id="display-image" src="" alt="Field Vision Analysis">
+              </div>
+              <div class="spectral-legend">
+                <div class="legend-item">
+                  <span class="legend-box legend-severe"></span>
+                  <span>Severe Chlorosis / Dead Soil (Negative VARI)</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-box legend-moderate"></span>
+                  <span>Moderate Moisture / Compaction Stress</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-box legend-healthy"></span>
+                  <span>Vigorous Crop Canopy</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Agronomic Diagnosis & Remediation Section -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Agronomic Due Diligence Audit</span>
+              <span class="card-tag" id="val-engine-tag">Anthropic Claude 3.5 Sonnet</span>
+            </div>
+            <div class="card-body">
+              <!-- Diagnosis Callout -->
+              <div class="diligence-block">
+                <span class="block-heading">Growth Stunting Root-Cause Diagnosis</span>
+                <p class="diagnosis-text" id="val-diagnosis">--</p>
+              </div>
+
+              <!-- Soil Chemical Equilibrium -->
+              <div class="diligence-block">
+                <span class="block-heading">Soil Chemistry & Baseline Equilibrium</span>
+                <p class="soil-text" id="val-soil-audit">--</p>
+                <div class="soil-stats-grid">
+                  <div class="soil-stat-item">
+                    <span class="stat-label">Soil pH (H₂O)</span>
+                    <span class="stat-val font-mono" id="val-soil-ph">--</span>
+                  </div>
+                  <div class="soil-stat-item">
+                    <span class="stat-label">Nitrogen Reserves</span>
+                    <span class="stat-val font-mono" id="val-soil-n">-- g/kg</span>
+                  </div>
+                  <div class="soil-stat-item">
+                    <span class="stat-label">Organic Carbon (SOC)</span>
+                    <span class="stat-val font-mono" id="val-soil-soc">-- g/kg</span>
+                  </div>
+                  <div class="soil-stat-item">
+                    <span class="stat-label">Clay Matrix</span>
+                    <span class="stat-val font-mono" id="val-soil-clay">--%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Precision Zonal Fertilizer Schedule Table -->
+              <div class="diligence-block">
+                <span class="block-heading">Precision Zonal Fertilizer & Stoichiometry Schedule</span>
+                <div class="table-responsive">
+                  <table class="data-table" id="fertilizer-table">
+                    <thead>
+                      <tr>
+                        <th>Nutrient / Amendment</th>
+                        <th>Rate (kg/ha)</th>
+                        <th>Application Window</th>
+                        <th>Target Parcel Zone</th>
+                        <th>Ecological Purpose</th>
+                      </tr>
+                    </thead>
+                    <tbody id="fertilizer-tbody">
+                      <!-- Populated dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Irrigation & Climate Resilience Plan -->
+              <div class="diligence-block">
+                <span class="block-heading">Irrigation & Climate Resilience Roadmap</span>
+                <p class="irrigation-text" id="val-irrigation">--</p>
+              </div>
+
+              <!-- Investment Summary Footer -->
+              <div class="financial-summary-grid">
+                <div class="financial-card">
+                  <span class="fin-label">Estimated Bio-Remediation Cost</span>
+                  <span class="fin-value font-mono text-emerald" id="val-remediation-cost">$-- / ha</span>
+                </div>
+                <div class="financial-card">
+                  <span class="fin-label">Carbon Sequestration Potential</span>
+                  <span class="fin-value font-mono text-cyan" id="val-carbon-seq">-- tons CO₂e</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- VIEW 2: FARMER CRISIS & SOLUTIONS (Linear & Apple Human-Centric UI) -->
+    <section class="farmer-impact-view view-container hidden" id="view-farmer-impact">
+      <!-- Hero Header -->
+      <div class="impact-hero">
+        <span class="impact-pill">The Real-World Crisis & Engineering Response</span>
+        <h1>Empowering Farmers, De-Risking Land, Eliminating Runoff</h1>
+        <p>Smallholders and family farmers operate on margins below 8% while absorbing 100% of climate and soil risks. When farmland is acquired blindly or crops stunt, predatory chemical sales force farmers into debt while poisoning soil biology. TerraPulse delivers institutional agronomic diligence for free.</p>
+      </div>
+
+      <!-- 4-Stat Ticker Grid (Linear Style) -->
+      <div class="impact-ticker-grid">
+        <div class="impact-ticker-card">
+          <span class="ticker-value text-emerald">-$190 / ha</span>
+          <span class="ticker-label">Fertilizer Spend Reduced</span>
+          <span class="ticker-sub">Eliminates 38% of chemical over-application via precision zonal delivery</span>
+        </div>
+        <div class="impact-ticker-card">
+          <span class="ticker-value text-cyan">+28% Yield</span>
+          <span class="ticker-label">Crop Loss Prevention</span>
+          <span class="ticker-sub">Catches latent subsoil stress weeks before irreversible visual wilt</span>
+        </div>
+        <div class="impact-ticker-card">
+          <span class="ticker-value" style="color:#111827;">+$17,900 / yr</span>
+          <span class="ticker-label">Net Smallholder Benefit</span>
+          <span class="ticker-sub">Combined annual financial gain modeled for a 20-hectare family farm</span>
+        </div>
+        <div class="impact-ticker-card">
+          <span class="ticker-value text-amber">$0 Paywall</span>
+          <span class="ticker-label">Zero-Barrier Access</span>
+          <span class="ticker-sub">Runs on standard smartphone or drone cameras with zero paid API keys</span>
+        </div>
+      </div>
+
+      <!-- Problem vs. Solution Comparative Matrix -->
+      <div class="comparison-matrix">
+        <!-- Comparative Row 1 -->
+        <div class="comparison-card">
+          <div class="problem-side">
+            <span class="comparison-tag tag-problem">The Status Quo Crisis</span>
+            <h3 class="comparison-title">Blind Land Leases & Hidden Subsoil Compaction</h3>
+            <p class="comparison-desc">Farmers and cooperatives routinely purchase or enter multi-year leases on parcels with invisible subsoil hardpans, high electrical conductivity (salinity), or severe nitrogen depletion. Because traditional soil coring takes weeks and costs hundreds of dollars, farmers only discover dead soil after planting collapses.</p>
+            <div class="comparison-callout callout-problem">
+              Catastrophic Loss: $15,000 to $45,000 in lost lease capital, wasted seed, and futile labor.
+            </div>
+          </div>
+          <div class="solution-side">
+            <span class="comparison-tag tag-solution">The TerraPulse Solution</span>
+            <h3 class="comparison-title">30-Second Pre-Purchase Diligence Dossier</h3>
+            <p class="comparison-desc">Drop a GPS pin anywhere on Earth, upload a standard photo, and instantly query physical soil chemistry (pH, nitrogen, organic carbon, clay fractions) and compute an objective 0–100 Farmland Viability Score with an executive investment verdict before signing any deed or lease.</p>
+            <div class="comparison-callout callout-solution">
+              Total Capital Protection: 100% de-risked land diligence before capital is deployed.
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparative Row 2 -->
+        <div class="comparison-card">
+          <div class="problem-side">
+            <span class="comparison-tag tag-problem">The Status Quo Crisis</span>
+            <h3 class="comparison-title">The "Chemical Shield" Fallacy & Aquifer Dead Zones</h3>
+            <p class="comparison-desc">When early crops show pale leaves or uneven growth, chemical salesmen advise farmers to dump massive doses of synthetic urea and DAP uniformly across the entire parcel. Over 40% of this synthetic nitrogen cannot be absorbed; it leaches into local drinking aquifers and rivers, causing massive toxic dead zones.</p>
+            <div class="comparison-callout callout-problem">
+              Ecological & Financial Waste: $190/ha wasted on leached nitrogen runoff and dead zones.
+            </div>
+          </div>
+          <div class="solution-side">
+            <span class="comparison-tag tag-solution">The TerraPulse Solution</span>
+            <h3 class="comparison-title">Stoichiometric Zonal Prescription Schedules</h3>
+            <p class="comparison-desc">TerraPulse decomposes the orthomosaic into discrete chlorotic vs. healthy zones. Rather than broadcasting uniform chemicals, it prescribes exact kilogram-per-hectare rates of coated urea, DAP, and biochar targeted strictly to detected anomaly zones, matching crop uptake stoichiometry.</p>
+            <div class="comparison-callout callout-solution">
+              38% Chemical Runoff Reduction: Saves ~$3,800 per 20-ha farm per season while restoring soil.
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparative Row 3 -->
+        <div class="comparison-card">
+          <div class="problem-side">
+            <span class="comparison-tag tag-problem">The Status Quo Crisis</span>
+            <h3 class="comparison-title">The $4,000+ Multispectral Sensor Hardware Paywall</h3>
+            <p class="comparison-desc">Commercial precision agriculture solutions require Near-Infrared (NIR) multispectral cameras ($4,000 to $8,000) and expensive proprietary software subscriptions ($1,800/year), making precision technology an exclusive luxury for giant industrial agribusinesses.</p>
+            <div class="comparison-callout callout-problem">
+              Exclusion Barrier: 99% of global smallholders cannot afford NIR hardware or SaaS fees.
+            </div>
+          </div>
+          <div class="solution-side">
+            <span class="comparison-tag tag-solution">The TerraPulse Solution</span>
+            <h3 class="comparison-title">Zero-NIR Visible Spectrum Optical Physics</h3>
+            <p class="comparison-desc">TerraPulse replaces expensive NIR sensors with mathematical indices calculated directly from standard RGB photos: the Visible Atmospherically Resistant Index (VARI = (G-R)/(G+R-B)) and Excess Green (ExG = 2G-R-B). Any $150 smartphone or $300 drone delivers full crop canopy diligence.</p>
+            <div class="comparison-callout callout-solution">
+              Democratized Access: 95% reduction in precision farming entry barrier with zero hardware purchase.
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparative Row 4 -->
+        <div class="comparison-card">
+          <div class="problem-side">
+            <span class="comparison-tag tag-problem">The Status Quo Crisis</span>
+            <h3 class="comparison-title">Credit Rejection by Rural Agricultural Lenders</h3>
+            <p class="comparison-desc">Over 60% of smallholder agricultural loan applications are rejected by banks because rural branch managers lack reliable, auditable tools to evaluate land quality. Underwriting is based purely on physical collateral, permanently locking tenant farmers out of affordable capital.</p>
+            <div class="comparison-callout callout-problem">
+              Financial Exclusion: Traps smallholders in predatory informal high-interest debt cycles.
+            </div>
+          </div>
+          <div class="solution-side">
+            <span class="comparison-tag tag-solution">The TerraPulse Solution</span>
+            <h3 class="comparison-title">Institutional Bank-Grade Due Diligence PDF</h3>
+            <p class="comparison-desc">With one click, TerraPulse compiles the Farmland Viability Score, ISRIC soil chemistry baseline, and climate drought telemetry into a standardized, institutional-grade PDF dossier accepted by agricultural banks and micro-lenders to underwrite green loans.</p>
+            <div class="comparison-callout callout-solution">
+              Green Credit Unlocked: Standardized risk scoring unlocks affordable low-interest loans.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linear Style Bottom CTA -->
+      <div class="linear-cta-card">
+        <h2>Experience Autonomous Farmland Diligence in Action</h2>
+        <p>Test how TerraPulse diagnoses crop chlorosis and soil chemistry on our verified benchmark parcels with zero setup.</p>
+        <button class="btn btn-white btn-lg" onclick="app.switchView('studio'); app.loadScenario('midwest_corn_nitrogen_deficit');">
+          Audit Iowa Corn Parcel in Studio &rarr;
+        </button>
+      </div>
+    </section>
+
+    <!-- VIEW 3: HOW IT WORKS & METHODOLOGY -->
+    <section class="explainer-view view-container hidden" id="view-how-it-works">
+      <!-- Explainer Hero -->
+      <div class="explainer-hero">
+        <span class="hero-pill">NextStep Hacks 2026 // Earth Forward Track</span>
+        <h1>Bridging Geospatial Spectral Physics and Agronomic Due Diligence</h1>
+        <p>Traditional precision agriculture forces farmers into $4,000+ near-infrared cameras or expensive satellite subscriptions. TerraPulse combines visible-spectrum mathematical indices with open agrometeorology and Claude 3.5 Sonnet to democratize soil diligence and eliminate synthetic fertilizer runoff.</p>
+      </div>
+
+      <!-- The Real-World Crises -->
+      <div class="crisis-grid">
+        <div class="crisis-card">
+          <span class="crisis-metric text-red">$65 Billion</span>
+          <span class="crisis-title">Blind Farmland Investments</span>
+          <p class="crisis-desc">Smallholders, cooperatives, and agricultural banks routinely purchase or lease land with invisible subsoil compaction, acute salinity, or nitrogen depletion—discovering the land's failure only after harvest collapse.</p>
+        </div>
+        <div class="crisis-card">
+          <span class="crisis-metric text-amber">40% Runoff</span>
+          <span class="crisis-title">Synthetic Fertilizer Leaching</span>
+          <p class="crisis-desc">Without spatial maps of where crops are actually thriving vs. dying, farmers broadcast uniform nitrogen across fields. Over 40% leaches into local waterways, triggering toxic algal blooms and freshwater dead zones.</p>
+        </div>
+        <div class="crisis-card">
+          <span class="crisis-metric text-cyan">$4,000+ Barrier</span>
+          <span class="crisis-title">Multispectral Sensor Cost</span>
+          <p class="crisis-desc">Standard NDVI requires specialized Near-Infrared (NIR) optics. TerraPulse replaces this costly requirement with visible-spectrum mathematical physics accessible from any smartphone or consumer drone.</p>
+        </div>
+      </div>
+
+      <!-- 4-Pillar Architecture -->
+      <div>
+        <h2 class="section-heading">The 4-Pillar Scientific Architecture</h2>
+        <p class="section-sub">How raw drone photos and GPS coordinates transform into actionable due diligence dossiers in seconds.</p>
+
+        <div class="architecture-grid">
+          <!-- Pillar 1 -->
+          <div class="arch-card">
+            <div class="arch-header">
+              <div class="arch-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94"/></svg>
+              </div>
+              <div>
+                <span class="arch-step-badge">Pillar 01 // Computer Vision</span>
+                <h3 class="arch-title">Zero-NIR Visible Spectral Decomposition</h3>
+              </div>
+            </div>
+            <p class="arch-body">Ingests standard RGB imagery and isolates photosynthetic activity via the <strong>Visible Atmospherically Resistant Index (VARI)</strong> and <strong>Excess Green (ExG)</strong>. Uses mathematical morphology to segment crop canopy from bare soil and clusters anomaly contours around failing patches.</p>
+            <div class="formula-card">
+              VARI = (G - R) / (G + R - B + ε) &nbsp;|&nbsp; ExG = 2G - R - B
+            </div>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="arch-card">
+            <div class="arch-header">
+              <div class="arch-icon-box arch-icon-blue">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div>
+                <span class="arch-step-badge">Pillar 02 // Geospatial Telemetry</span>
+                <h3 class="arch-title">Global Multi-Layer Soil Telemetry</h3>
+              </div>
+            </div>
+            <p class="arch-body">Queries Open-Meteo Agromet and ISRIC SoilGrids v2.0 REST APIs with <strong>zero API keys required</strong>. Streams 3-layer volumetric soil moisture (0-7cm surface, 7-28cm rootzone, 28-100cm deep), FAO reference evapotranspiration (ET₀), soil pH, nitrogen reserves, and organic carbon.</p>
+            <div class="formula-card">
+              DVI = min(100, [(0.35 - θ₀₋₇)/0.35] × 60 + max(0, 7·ET₀ - P₇_day) × 0.5)
+            </div>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="arch-card">
+            <div class="arch-header">
+              <div class="arch-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <div>
+                <span class="arch-step-badge">Pillar 03 // Cognitive AI</span>
+                <h3 class="arch-title">Claude 3.5 Sonnet Agronomy Reasoner</h3>
+              </div>
+            </div>
+            <p class="arch-body">Acts as a senior agricultural chemist and land auditor. Ingests the computer vision anomaly contours, topsoil hydration deficit, and ISRIC soil chemistry to diagnose the root cause of stunting and assign an objective <strong>Farmland Viability Score (0-100)</strong>.</p>
+            <div class="formula-card">
+              Output: Viability Grade + Executive Verdict + Stunting Root-Cause Analysis
+            </div>
+          </div>
+
+          <!-- Pillar 4 -->
+          <div class="arch-card">
+            <div class="arch-header">
+              <div class="arch-icon-box arch-icon-blue">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div>
+                <span class="arch-step-badge">Pillar 04 // Ecological Remediation</span>
+                <h3 class="arch-title">Stoichiometric Zonal Fertilizer Schedule</h3>
+              </div>
+            </div>
+            <p class="arch-body">Eliminates uniform broadcast fertilization by prescribing exact kilogram-per-hectare rates for Urea, Diammonium Phosphate (DAP), Muriate of Potash, and Biochar targeted specifically to detected anomaly zones, preventing runoff into freshwater aquifers.</p>
+            <div class="formula-card">
+              Impact: 38% Less Chemical Runoff + $180/ha Remediation Savings
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action CTA -->
+      <div style="text-align: center; padding: 40px 0 20px;">
+        <button class="btn btn-primary btn-lg" onclick="app.switchView('studio'); app.loadScenario('midwest_corn_nitrogen_deficit');">
+          Launch Live Midwest Corn Audit in Studio &rarr;
+        </button>
+      </div>
+    </section>
+
+    <!-- VIEW 3: BENCHMARK REGISTRY -->
+    <section class="benchmarks-view view-container hidden" id="view-benchmarks">
+      <div class="explainer-hero">
+        <span class="hero-pill">Verified Hackathon Evaluation Benchmarks</span>
+        <h1>Curated Agricultural Case Studies</h1>
+        <p>Evaluate real-world agricultural challenge parcels across different agro-climatic zones with one click. Each benchmark demonstrates distinct soil chemistry, vision anomalies, and climate shock risks.</p>
+      </div>
+
+      <div class="benchmark-registry-grid">
+        <!-- Benchmark 1 -->
+        <div class="bench-card">
+          <div class="bench-preview-banner" style="background: linear-gradient(135deg, #EBF8EE 0%, #D1FAE5 100%);">
+            <span class="bench-badge">Midwest USA // Iowa</span>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-apple-green-dark);"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="bench-card-body">
+            <h3 class="bench-card-title">US Corn Belt — Nitrogen Leaching & Chlorosis</h3>
+            <p class="bench-card-desc">Commercial maize parcel exhibiting localized nitrogen chlorosis and topsoil compaction following heavy spring runoff. Demonstrates VARI anomaly clustering and targeted urea split-application.</p>
+            <div class="bench-specs-row">
+              <span><strong>Crop:</strong> Corn / Maize</span>
+              <span><strong>Area:</strong> 35.0 Hectares</span>
+            </div>
+            <div class="bench-specs-row">
+              <span><strong>Coordinates:</strong> 41.8780° N, 93.0977° W</span>
+            </div>
+            <button class="btn btn-primary btn-block btn-sm" onclick="app.switchView('studio'); app.loadScenario('midwest_corn_nitrogen_deficit');">
+              Audit This Parcel in Studio
+            </button>
+          </div>
+        </div>
+
+        <!-- Benchmark 2 -->
+        <div class="bench-card">
+          <div class="bench-preview-banner" style="background: linear-gradient(135deg, #FFF6E6 0%, #FED7AA 100%);">
+            <span class="bench-badge">South Asia // Punjab</span>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-apple-amber-dark);"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+          </div>
+          <div class="bench-card-body">
+            <h3 class="bench-card-title">Indo-Gangetic Plain — Salinity & Rootzone Stress</h3>
+            <p class="bench-card-desc">Intensive agricultural tract with elevated subsoil electrical conductivity and microclimate evaporation deficit. Highlights biochar incorporation and sub-alkaline pH remediation.</p>
+            <div class="bench-specs-row">
+              <span><strong>Crop:</strong> Durum Wheat</span>
+              <span><strong>Area:</strong> 18.2 Hectares</span>
+            </div>
+            <div class="bench-specs-row">
+              <span><strong>Coordinates:</strong> 30.9010° N, 75.8573° E</span>
+            </div>
+            <button class="btn btn-primary btn-block btn-sm" onclick="app.switchView('studio'); app.loadScenario('punjab_semi_arid_saline');">
+              Audit This Parcel in Studio
+            </button>
+          </div>
+        </div>
+
+        <!-- Benchmark 3 -->
+        <div class="bench-card">
+          <div class="bench-preview-banner" style="background: linear-gradient(135deg, #E8F2FD 0%, #BAE6FD 100%);">
+            <span class="bench-badge">Western USA // California</span>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-apple-blue);"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          </div>
+          <div class="bench-card-body">
+            <h3 class="bench-card-title">Central Valley — Acute Groundwater Deficit</h3>
+            <p class="bench-card-desc">High-value perennial almond crop acreage requiring strict water budgeting, vapor pressure deficit management, and organic carbon replenishment against acute aquifer drawdown.</p>
+            <div class="bench-specs-row">
+              <span><strong>Crop:</strong> Almonds / Orchard</span>
+              <span><strong>Area:</strong> 50.0 Hectares</span>
+            </div>
+            <div class="bench-specs-row">
+              <span><strong>Coordinates:</strong> 36.7783° N, 119.4179° W</span>
+            </div>
+            <button class="btn btn-primary btn-block btn-sm" onclick="app.switchView('studio'); app.loadScenario('california_almond_drought');">
+              Audit This Parcel in Studio
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Application Client JS -->
+  <script src="app.js"></script>
+</body>
+</html>
