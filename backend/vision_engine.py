@@ -205,6 +205,19 @@ class VisionEngine:
             # Multiple patchy barren areas
             for center, axes in [((300, 200), (80, 50)), ((580, 400), (110, 70)), ((180, 450), (60, 40))]:
                 cv2.ellipse(textured, center, axes, 0, 0, 360, (40, 65, 100), -1)
+        elif scenario == "drought_arid":
+            # Arid orchard pattern: Pale bleached dry sandy soil background with wider row spacing
+            canvas[:] = [85, 135, 175]  # Arid sandy topsoil
+            # Orchard grid pattern
+            for y in range(25, h, 28):
+                for x in range(25, w, 32):
+                    # Stressed chlorotic olive-green foliage
+                    cv2.circle(canvas, (x, y), 9, (42, 118, 75), -1)
+            noise = np.random.normal(0, 10, (h, w, 3)).astype(np.int16)
+            textured = np.clip(canvas.astype(np.int16) + noise, 0, 255).astype(np.uint8)
+            # Severe diagonal drought / dry-well failure corridor
+            cv2.ellipse(textured, (480, 260), (160, 95), 35, 0, 360, (70, 115, 155), -1)
+            cv2.ellipse(textured, (260, 420), (120, 70), -20, 0, 360, (75, 120, 160), -1)
 
         # Smooth slightly to mimic drone aerial optics
         textured = cv2.GaussianBlur(textured, (3, 3), 0)

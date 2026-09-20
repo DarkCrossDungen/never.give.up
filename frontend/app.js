@@ -120,12 +120,15 @@ class TerraPulseApp {
     }, 250);
   }
 
-  updateCoordinates(lat, lon) {
+  updateCoordinates(lat, lon, clearScenario = true) {
     const fixedLat = parseFloat(lat).toFixed(4);
     const fixedLon = parseFloat(lon).toFixed(4);
     this.inputLat.value = fixedLat;
     this.inputLon.value = fixedLon;
     this.coordDisplay.innerText = `${fixedLat}° N, ${fixedLon}° E`;
+    if (clearScenario && this.scenarioSelector) {
+      this.scenarioSelector.value = "";
+    }
   }
 
   switchView(viewName) {
@@ -270,13 +273,13 @@ class TerraPulseApp {
       const data = await resp.json();
       this.renderResults(data);
 
-      // Sync map coordinates
+      // Sync map coordinates without clearing the scenario dropdown
       const coords = data.field_metadata.coordinates;
-      this.updateCoordinates(coords.latitude, coords.longitude);
+      this.updateCoordinates(coords.latitude, coords.longitude, false);
       this.marker.setLatLng([coords.latitude, coords.longitude]);
       this.map.setView([coords.latitude, coords.longitude], 11);
 
-      if (data.field_metadata.intended_crop) {
+      if (data.field_metadata.intended_crop && this.inputCrop) {
         this.inputCrop.value = data.field_metadata.intended_crop;
       }
       if (data.field_metadata.land_area_ha) {
@@ -290,27 +293,24 @@ class TerraPulseApp {
   }
 
   async executeAnalysis() {
-    // If no file uploaded and a scenario is picked, run scenario
-    if (!this.selectedFile && this.scenarioSelector.value) {
+    // If a preset scenario is explicitly selected in dropdown, run preset
+    if (!this.selectedFile && this.scenarioSelector && this.scenarioSelector.value) {
       return this.loadScenario(this.scenarioSelector.value);
     }
 
-    if (!this.selectedFile) {
-      alert("Please upload field imagery or select a preset benchmark scenario to analyze.");
-      return;
-    }
-
-    this.showLoading("EXECUTING OPENCV VARI DECOMPOSITION & TELEMETRY QUERY...");
+    this.showLoading("EXECUTING OPENCV VARI DECOMPOSITION & GEOSPATIAL TELEMETRY...");
 
     try {
       const formData = new FormData();
-      formData.append("file", this.selectedFile);
-      formData.append("latitude", this.inputLat.value);
-      formData.append("longitude", this.inputLon.value);
+      if (this.selectedFile) {
+        formData.append("file", this.selectedFile);
+      }
+      formData.append("latitude", this.inputLat.value || "30.9010");
+      formData.append("longitude", this.inputLon.value || "75.8573");
       formData.append("field_name", `Farmland Parcel [${this.inputLat.value}, ${this.inputLon.value}]`);
-      formData.append("intended_crop", this.inputCrop.value);
-      formData.append("intent", this.inputIntent.value);
-      formData.append("land_area_ha", this.inputArea.value);
+      formData.append("intended_crop", (this.inputCrop && this.inputCrop.value) || "Field Crop");
+      formData.append("intent", this.inputIntent.value || "Pre-Cultivation Land Viability Audit");
+      formData.append("land_area_ha", this.inputArea.value || "25.0");
 
       const resp = await fetch(`${this.apiBase}/api/analyze-field`, {
         method: "POST",
@@ -391,7 +391,9 @@ class TerraPulseApp {
     });
 
     this.valIrrigation.innerText = dr.irrigation_and_climate_roadmap;
-    this.valRemediationCost.innerText = `$${dr.estimated_remediation_cost_usd_per_ha} / ha`;
+    if (this.valRemediationCost) {
+      this.valRemediationCost.innerText = `$${dr.estimated_remediation_cost_usd_per_ha} / ha`;
+    }
     this.valCarbonSeq.innerText = `${dr.carbon_sequestration_potential_tons_co2e} tons CO₂e`;
     if (dr.model_engine) {
       this.valEngineTag.innerText = dr.model_engine;

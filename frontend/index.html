@@ -102,15 +102,9 @@
           </div>
 
           <!-- Parcel Parameters -->
-          <div class="form-row-2">
-            <div class="form-group">
-              <label class="form-label">Target Crop</label>
-              <input type="text" id="input-crop" value="Corn / Maize" class="form-control" placeholder="e.g. Soybeans, Wheat">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Area (Hectares)</label>
-              <input type="number" id="input-area" value="15.0" step="0.5" class="form-control font-mono">
-            </div>
+          <div class="form-group">
+            <label class="form-label">Parcel Area (Hectares)</label>
+            <input type="number" id="input-area" value="15.0" step="0.5" class="form-control font-mono">
           </div>
 
           <div class="form-group">
@@ -173,7 +167,7 @@
         <div id="state-loading" class="loading-state hidden">
           <div class="spinner"></div>
           <span class="loading-step" id="loading-step-text">Processing spectral VARI decomposition...</span>
-          <span class="loading-sub">Querying Open-Meteo multi-depth soil moisture & Claude 3.5 Sonnet...</span>
+          <span class="loading-sub">Querying Open-Meteo multi-depth soil moisture & Agronomy Intelligence Engine...</span>
         </div>
 
         <!-- Populated Results Content -->
@@ -249,7 +243,7 @@
           <div class="card">
             <div class="card-header">
               <span class="card-title">Agronomic Due Diligence Audit</span>
-              <span class="card-tag" id="val-engine-tag">Anthropic Claude 3.5 Sonnet</span>
+              <span class="card-tag" id="val-engine-tag">Autonomous Agronomy Engine</span>
             </div>
             <div class="card-body">
               <!-- Diagnosis Callout -->
@@ -309,12 +303,8 @@
                 <p class="irrigation-text" id="val-irrigation">--</p>
               </div>
 
-              <!-- Investment Summary Footer -->
+              <!-- Ecological Summary Footer -->
               <div class="financial-summary-grid">
-                <div class="financial-card">
-                  <span class="fin-label">Estimated Bio-Remediation Cost</span>
-                  <span class="fin-value font-mono text-emerald" id="val-remediation-cost">$-- / ha</span>
-                </div>
                 <div class="financial-card">
                   <span class="fin-label">Carbon Sequestration Potential</span>
                   <span class="fin-value font-mono text-cyan" id="val-carbon-seq">-- tons CO₂e</span>
@@ -458,7 +448,7 @@
       <div class="explainer-hero">
         <span class="hero-pill">NextStep Hacks 2026 // Earth Forward Track</span>
         <h1>Bridging Geospatial Spectral Physics and Agronomic Due Diligence</h1>
-        <p>Traditional precision agriculture forces farmers into $4,000+ near-infrared cameras or expensive satellite subscriptions. TerraPulse combines visible-spectrum mathematical indices with open agrometeorology and Claude 3.5 Sonnet to democratize soil diligence and eliminate synthetic fertilizer runoff.</p>
+        <p>Traditional precision agriculture forces farmers into $4,000+ near-infrared cameras or expensive satellite subscriptions. TerraPulse combines visible-spectrum mathematical indices with open agrometeorology and autonomous agronomic intelligence to democratize soil diligence and eliminate synthetic fertilizer runoff.</p>
       </div>
 
       <!-- The Real-World Crises -->
@@ -528,7 +518,7 @@
               </div>
               <div>
                 <span class="arch-step-badge">Pillar 03 // Cognitive AI</span>
-                <h3 class="arch-title">Claude 3.5 Sonnet Agronomy Reasoner</h3>
+                <h3 class="arch-title">Autonomous Agronomy Intelligence Engine</h3>
               </div>
             </div>
             <p class="arch-body">Acts as a senior agricultural chemist and land auditor. Ingests the computer vision anomaly contours, topsoil hydration deficit, and ISRIC soil chemistry to diagnose the root cause of stunting and assign an objective <strong>Farmland Viability Score (0-100)</strong>.</p>

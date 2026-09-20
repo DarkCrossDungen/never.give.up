@@ -117,7 +117,7 @@ TerraPulse is engineered around the core thesis of the **Earth Forward** track: 
 +-----------------------------------------------------------------------------------+
 |                                                                                   |
 |  [ PHASE 1: HACKATHON PROTOTYPE (Current) ]                                       |
-|  * 100% working multimodal platform (FastAPI + OpenCV + Open-Meteo + Claude).     |
+|  * 100% working multimodal platform (FastAPI + OpenCV + Open-Meteo + Agronomy AI).|
 |  * Instant benchmark audits for US, India, and California agro-climatic zones.    |
 |  * Zero-barrier web interface under Apple Human Interface Guidelines.             |
 |                                                                                   |

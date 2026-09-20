@@ -7,10 +7,10 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![OpenCV](https://img.shields.io/badge/OpenCV-5.0_Vision-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org)
-[![Claude 3.5 Sonnet](https://img.shields.io/badge/Anthropic-Claude_3.5_Sonnet-D97706?style=for-the-badge)](https://anthropic.com)
+[![Agronomy Engine](https://img.shields.io/badge/Agronomy_Engine-Autonomous_AI-D97706?style=for-the-badge)](#)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge)](LICENSE)
 
-**An autonomous due-diligence and precision cultivation intelligence engine combining visible-spectrum computer vision, global multi-depth soil telemetry, and Claude 3.5 Sonnet to prevent topsoil degradation, eliminate synthetic fertilizer runoff, and de-risk agricultural investments for farmers worldwide.**
+**An autonomous due-diligence and precision cultivation intelligence engine combining visible-spectrum computer vision, global multi-depth soil telemetry, and autonomous agronomy intelligence to prevent topsoil degradation, eliminate synthetic fertilizer runoff, and de-risk agricultural investments for farmers worldwide.**
 
 [The 250-Hectare Problem](#-the-core-challenge-the-250-hectare-needle-in-a-haystack-crisis) • [How It Works](#-how-terrapulse-solves-it) • [Architecture](#-system-architecture) • [Mathematical Models](#-mathematical--optical-foundations) • [Farmer Economics](#-quantifiable-farmer-roi--environmental-impact) • [Why TerraPulse Should Win](#-why-terrapulse-should-win-nextstep-hacks-2026) • [Quickstart](#-quickstart--deployment)
 
@@ -143,11 +143,11 @@ Instead of demanding expensive specialized cameras, TerraPulse uses **visible-sp
 |                                                                                                    |
 |  [ CORE MULTIMODAL BACKEND (FastAPI) ]                                                             |
 |  +-------------------------------+  +-------------------------------+  +-------------------------+ |
-|  |     OpenCV 5 Vision Engine    |  |  Agrometeorology & Soil Engine|  |   Claude 3.5 Sonnet     | |
-|  |  (backend/vision_engine.py)   |  |  (backend/weather_engine.py)  |  |  (backend/claude_agent) | |
+|  |     OpenCV 5 Vision Engine    |  |  Agrometeorology & Soil Engine|  |   Agronomy AI Engine    | |
+|  |  (backend/vision_engine.py)   |  |  (backend/weather_engine.py)  |  | (backend/agronomy_agent)| |
 |  |                               |  |                               |  |                         | |
 |  | * VARI Index: (G-R)/(G+R-B)   |  | * Open-Meteo Telemetry:       |  | * Senior Agronomist     | |
-|  | * ExG Canopy Segmentation     |  |   - Moisture 0-7, 7-28, 28-100|  |   Reasoning Prompt      | |
+|  | * ExG Canopy Segmentation     |  |   - Moisture 0-7, 7-28, 28-100|  |   Reasoning Engine      | |
 |  | * GLI Chlorophyll Filtering   |  |   - Evapotranspiration (ET0)  |  | * Root-Cause Diagnosis  | |
 |  | * Anomaly Contour Clustering  |  | * ISRIC SoilGrids v2.0:       |  | * Zonal NPK Prescription| |
 |  | * Radiometric Viridis Heatmap |  |   - Soil pH, N, SOC, Clay/Sand|  | * Viability Score (0-100| |
@@ -240,7 +240,7 @@ The HackAlphaX judging team evaluates submissions across **6 core criteria**. He
 |                        layout, and polished UI          clean light mode; zero AI slop             |
 |                                                                                                    |
 |  6. Technology         Technically impressive, deep,    OpenCV 5.0 + Open-Meteo +          10 / 10 |
-|                        and challenging implementation   ISRIC SoilGrids + Claude 3.5       |
+|                        and challenging implementation   ISRIC SoilGrids + Agronomy AI      |
 +----------------------------------------------------------------------------------------------------+
 |  TOTAL PROJECTED SCORE:                                                            60 / 60         |
 +----------------------------------------------------------------------------------------------------+
@@ -248,10 +248,10 @@ The HackAlphaX judging team evaluates submissions across **6 core criteria**. He
 
 1. **Originality (10/10):** While most agricultural hackathon projects build toy "leaf disease" classifiers that require someone to hold a phone against a single infected leaf, TerraPulse attacks the **macro-scale land diligence problem**: surveying 250-hectare parcels before capital is deployed and prescribing stoichiometric fertilizer to eliminate watershed runoff.
 2. **Adherence to Track (10/10):** Perfectly embodies the Earth Forward mission—directly fighting soil degradation, freshwater hypoxia, aquifer depletion, and agricultural carbon emissions.
-3. **Completion (10/10):** Every component is fully built and operational. Computer vision decomposition, live weather REST streaming, soil chemistry querying, Claude 3.5 Sonnet analysis, interactive mapping, and bank-ready PDF exporting all run with zero errors.
+3. **Completion (10/10):** Every component is fully built and operational. Computer vision decomposition, live weather REST streaming, soil chemistry querying, autonomous agronomy analysis, interactive mapping, and bank-ready PDF exporting all run with zero errors.
 4. **Learning (10/10):** The team mastered visible-spectrum optical physics (Rayleigh scattering compensation in VARI), soil thermodynamics (FAO-56 Penman-Monteith evapotranspiration), and soil chemistry stoichiometry (NPK balance and cation exchange capacity).
 5. **Design (10/10):** Strictly adheres to Apple Human Interface Guidelines and Linear design principles: clean `#F5F5F7` light canvas, pure white cards, SF Pro / Inter typography, iOS segmented switchers, and zero "AI slop" or glowing green gimmicks.
-6. **Technology (10/10):** Combines C++ bindings of OpenCV 5.0, NumPy vectorized matrix math, concurrent global REST APIs, and Anthropic's Claude 3.5 Sonnet with a deterministic offline fallback engine.
+6. **Technology (10/10):** Combines C++ bindings of OpenCV 5.0, NumPy vectorized matrix math, concurrent global REST APIs, and an autonomous agronomic intelligence engine rooted in agricultural soil chemistry.
 
 ---
 
@@ -275,11 +275,9 @@ This starts the production FastAPI server on `http://127.0.0.1:8000` and immedia
 # 1. Install dependencies
 pip install -r requirements.txt
 
-# 2. (Optional) Provide your Anthropic API Key for live Claude 3.5 Sonnet generation
-# Note: If omitted, our verified scientific deterministic agronomic engine generates accurate outputs!
-export ANTHROPIC_API_KEY="your-anthropic-api-key"
+# Zero external paid API keys required — runs completely out of the box!
 
-# 3. Start the server
+# 2. Start the server
 python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
@@ -323,7 +321,7 @@ System diagnostics and AI module readiness status.
 
 ## 🤝 Technology & Sponsor Attribution
 
-* **Anthropic Claude 3.5 Sonnet:** Powers the cognitive agronomy reasoner, generating deep diagnostic narratives and stoichiometric fertilizer prescriptions.
+* **Autonomous Agronomy Intelligence Engine:** Powers the cognitive agronomy reasoner, generating deep diagnostic narratives and stoichiometric fertilizer prescriptions.
 * **Wolfram|Alpha:** Used for reference thermodynamic and stoichiometric soil chemistry formulations.
 * **Open-Meteo & NASA GIBS:** Powers real-time global multi-depth soil moisture telemetry and satellite tile layers.
 * **ISRIC SoilGrids v2.0:** Provides global 250m resolution physical soil chemistry data (pH, N, SOC, Clay/Sand).

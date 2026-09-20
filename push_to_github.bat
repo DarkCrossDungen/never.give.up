@@ -21,7 +21,7 @@ git commit -m "feat: complete TerraPulse agronomic diligence platform for NextSt
 - Responds directly to Earth Forward theme (sustainable agriculture, soil health, runoff elimination)
 - Implements Zero-NIR Visible Optical Physics (VARI, ExG, GLI) via OpenCV 5.0
 - Integrates real-time 3-depth soil hydrology & chemistry via Open-Meteo and ISRIC SoilGrids
-- Powers cognitive diligence & stoichiometric fertilizer prescriptions via Claude 3.5 Sonnet
+- Powers cognitive diligence & stoichiometric fertilizer prescriptions via Autonomous Agronomy Engine
 - Features Apple & Linear design system (light mode, SF Pro/Inter typography, 0 AI slop)
 - Includes bank-grade PDF dossier export for agricultural lenders and cooperatives
 
