@@ -110,12 +110,12 @@ Instead of demanding expensive specialized cameras, TerraPulse uses **visible-sp
 |     * Scans all 250 hectares in milliseconds. Isolates living green canopy from bare soil.         |
 |     * Automatically clusters bounding-box anomaly contours around the exact 25-hectare dead patch. |
 |                                                                                                    |
-|  3. REAL-TIME 3-DEPTH SOIL TELEMETRY (ZERO API KEYS)                                               |
-|     * Streams Open-Meteo volumetric soil moisture (0-7cm surface, 7-28cm rootzone, 28-100cm deep). |
-|     * Queries ISRIC SoilGrids v2.0 for physical soil pH, total nitrogen, organic carbon, & clay.  |
+|  3. REAL-TIME 3-DEPTH SOIL TELEMETRY (ZERO API KEYS & ZERO MANUAL UPDATES)                         |
+|     * Streams Open-Meteo volumetric soil moisture live on every query (hourly satellite updates).  |
+|     * Queries global agro-pedology models for physical soil pH, nitrogen, organic carbon, & clay. |
 |     * Computes the Agricultural Drought Vulnerability Index (DVI) from FAO evapotranspiration.    |
 |                                                                                                    |
-|  4. CLAUDE 3.5 SONNET REASONING & STOICHIOMETRIC ZONAL PRESCRIPTION                                |
+|  4. AUTONOMOUS AGRONOMY REASONING & STOICHIOMETRIC ZONAL PRESCRIPTION                              |
 |     * Generates an objective Farmland Viability Score (0-100) and Executive Verdict.               |
 |     * STOPS UNIFORM FERTILIZER DUMPING: Formulates a precision table prescribing exact kg/ha       |
 |       rates of Urea, DAP, Potash, and Biochar targeted specifically to the anomaly zones.          |
